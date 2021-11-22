@@ -10,5 +10,8 @@
     "@slidev/theme-default": "*",
     "@slidev/theme-seriph": "*"
   },
-  "name": "css-grid-slides"
+  "name": "css-grid-slides",
+  "devDependencies": {
+    "@iconify-json/uim": "^1.0.2"
+  }
 }

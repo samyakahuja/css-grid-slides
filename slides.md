@@ -44,6 +44,51 @@ lineNumbers: false
   </span>
 
 ---
+layout: two-cols
+---
+
+# Grid Terminology
+
+- **grid lines**: grid is made up of lines that run horizontally and vertically,
+they are numbered from 1 and follow the writing mode. 
+- **grid tracks**: space between two grid lines
+- **grid cell**
+- **grid area**: several grid cells together, created by causing an item to span
+over multiple tracks.
+- **grid-gap**: spacing between tracks. grid items can span across them.
+
+The rows are always arranged along the "block" axis. Columns are always arranged along the "inline" axis.
+
+::right::
+
+inspect the grid using browser dev-tools
+
+<div class="wrapper">
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+</div>
+
+<style>
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(2, 100px);
+  gap: 16px;
+}
+
+.box {
+  background-color: pink;
+}
+
+.grid-cols-2 {
+  gap: 32px;
+}
+</style>
+
+---
 layout: center
 class: "text-center"
 ---
@@ -144,6 +189,55 @@ class: "text-center"
 </style>
 
 ---
+layout: two-cols
+---
+
+# Holup
+
+If the previous grid was invalid, then how do we create the *holy grail* layout with grids?
+
+<figure>
+<img src="https://css-grid-gules.vercel.app/grids/holy-grail.svg">
+<figcaption class="text-sm opacity-70 mt-2">Holy grail layout</figcaption>
+</figure>
+
+::right::
+
+Well we do it with overlapping grid items.
+
+<figure>
+<img src="https://css-grid-gules.vercel.app/grids/holy-grail-grid.svg">
+<figcaption class="text-sm opacity-70 mt-2">Holy grail layout where grid items span multiple cells</figcaption>
+</figure>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  figure {
+    width: min-content;
+    padding: 16px;
+    margin: 0 auto;
+  }
+
+  figure img {
+    width: 250px;
+    max-width: revert;
+  }
+
+.grid-cols-2 {
+  gap: 32px;
+}
+
+.col-right p {
+  text-align: center;
+  margin-top: 50px;
+  opacity: 0.7;
+}
+</style>
+
+---
 
 # Takeaways
 
@@ -165,235 +259,183 @@ symbols. It's up to the driver to decide how to use them.
 </p>
 
 ---
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
----
-
-## class: px-20
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="-t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
-
----
-
-## preload: false
-
-# Animations
-
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
-
-```html
-<div v-motion :initial="{ x: -80 }" :enter="{ x: 0 }">Slidev</div>
-```
-
-<div class="w-60 relative mt-6">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-square.png"
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-circle.png"
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-triangle.png"
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
-
-<br>
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-
-$$
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
-$$
-
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-3 gap-10 pt-4 -mb-6">
-
-```mermaid {scale: 0.5}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
----
-
 layout: center
-class: text-center
+class: "text-center"
+---
+
+# Let's play a game
+
+<a class="rocket-link" href="https://css-grid-gules.vercel.app/is-grid-valid" target="_">
+<uim-rocket class="text-3xl text-orange-400 animate-pulse animate-faster" />
+</a>
+
+<style>
+.rocket-link {
+  border: none;
+  border-style: none;
+  outline: none;
+}
+
+.rocket-link:hover {
+  border: none;
+}
+
+.rocket-link:hover svg {
+  color: green;
+  animation: unset;
+}
+</style>
+
+
+---
+
+# Show me the code!
+
+```css
+display: grid;
+gap: 16px;
+```
+
+<br>
+
+<div class="wrapper">
+<div class="box">1</div>
+<div class="box">2</div>
+<div class="box">3</div>
+<div class="box">4</div>
+</div>
+
+<div class="opacity-50 text-sm abs-br m-6 mb-7 flex gap-2">
+try changing <code>grid-auto-flow</code> to <code>column</code>
+</div>
+<div class="opacity-50 text-sm abs-br mb-2 mr-6 flex gap-2">
+also try giving each box a margin of top and bottom, why is there no margin collapse?
+</div>
+
+<style>
+.wrapper {
+  display: grid;
+  gap: 16px;
+  grid-auto-flow: unset;
+}
+
+.box {
+  padding: 16px;
+  background: peachpuff;
+}
+</style>
+
+---
+
+# 1fr and minmax
+
+```css
+display: flex;
+```
+
+<div class="wrapper wrapper-flex">
+  <div class="box">hello</div>
+  <div class="box">I'm</div>
+  <div class="box">A really long sentence</div>
+</div>
+
+```css
+grid-template-columns: repeat(3, auto);
+```
+
+<div class="wrapper wrapper-auto">
+  <div class="box">hello</div>
+  <div class="box">I'm</div>
+  <div class="box">A really long sentence</div>
+</div>
+
+```css
+grid-template-columns: repeat(3, minmax(auto, 1fr));
+```
+
+<div class="wrapper wrapper-1fr">
+  <div class="box">hello</div>
+  <!-- <div class="box">I'm</div> -->
+  <div class="box">A really long sentence</div>
+  <div class="box"></div>
+</div>
+
+```css
+grid-template-columns: repeat(3, minmax(0, 1fr)); /* which is same as repeat(3, 1fr) */
+```
+
+<div class="wrapper wrapper-minmax">
+  <div class="box">hello</div>
+  <!-- <div class="box">I'm</div> -->
+  <div class="box">A really long sentence</div>
+  <div class="box"></div>
+</div>
+
+<div class="opacity-50 text-sm abs-br m-6 flex gap-2">
+note: try adjusting the width of the grids and see what happens
+</div>
+
+<style>
+.wrapper {
+  display: grid;
+  gap: 8px;
+  width: 300px;
+  margin: 8px auto;
+}
+
+.box {
+  background-color: pink;
+}
+
+.wrapper-flex {
+  display: flex;
+}
+
+.wrapper-auto {
+  grid-template-columns: repeat(3, auto);
+}
+
+.wrapper-1fr {
+  grid-template-columns: repeat(3, minmax(auto, 1fr));
+}
+
+.wrapper-minmax {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.shiki-container {
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 16px;
+}
+
+.slidev-layout {
+  padding: 0;
+}
+
+h1 {
+  padding-top: 10px;
+  text-align: center;
+}
+</style>
+---
+
+This is a snippet from
+[web.dev](https://web.dev/learn/css/grid/#the-minmax()-function) that explains
+what `minmax(0, 1fr)` is really doing.
+
+> To force a track to take an equal share of the space in the grid container minus
+gaps use minmax. Replace 1fr as a track size with minmax(0, 1fr). This makes the
+minimum size of the track 0 and not the min-content size. Grid will then take
+all of the available size in the container, deduct the size needed for any gaps,
+and share the rest out according to your fr units.
 
 ---
 
 # Learn More
 
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+- [Reconsider the meaning of 1fr](https://github.com/w3c/csswg-drafts/issues/1777)
+- [A Deep Dive Into CSS Grid minmax()](https://ishadeed.com/article/css-grid-minmax/)
+- [Full-Bleed Layout Using CSS Grid](https://www.joshwcomeau.com/css/full-bleed/)
+- [Preventing overflow when using CSS Grid](https://css-tricks.com/preventing-a-grid-blowout/)
+- [Position sticky with CSS Grid](https://ishadeed.com/article/position-sticky-css-grid/)

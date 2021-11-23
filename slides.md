@@ -3,6 +3,7 @@ theme: seriph
 class: "text-center"
 highlighter: shiki
 lineNumbers: false
+background: https://source.unsplash.com/Vwf8q3RzBRE/1920x1279
 ---
 
 # CSS Grids
@@ -203,12 +204,16 @@ If the previous grid was invalid, then how do we create the *holy grail* layout 
 
 ::right::
 
+<v-click>
+
 Well we do it with overlapping grid items.
 
 <figure>
 <img src="https://css-grid-gules.vercel.app/grids/holy-grail-grid.svg">
 <figcaption class="text-sm opacity-70 mt-2">Holy grail layout where grid items span multiple cells</figcaption>
 </figure>
+
+</v-click>
 
 <style>
   * {
@@ -306,7 +311,7 @@ gap: 16px;
 </div>
 
 <div class="opacity-50 text-sm abs-br m-6 mb-7 flex gap-2">
-try changing <code>grid-auto-flow</code> to <code>column</code>
+try changing <code>grid-auto-flow</code> to <code>column</code> (grid auto flow values relate to relate to the writing mode of the document).
 </div>
 <div class="opacity-50 text-sm abs-br mb-2 mr-6 flex gap-2">
 also try giving each box a margin of top and bottom, why is there no margin collapse?
@@ -350,7 +355,7 @@ grid-template-columns: repeat(3, auto);
 </div>
 
 ```css
-grid-template-columns: repeat(3, minmax(auto, 1fr));
+grid-template-columns: repeat(3, 1fr); /* 1fr = minmax(auto, 1fr) */
 ```
 
 <div class="wrapper wrapper-1fr">
@@ -361,7 +366,7 @@ grid-template-columns: repeat(3, minmax(auto, 1fr));
 </div>
 
 ```css
-grid-template-columns: repeat(3, minmax(0, 1fr)); /* which is same as repeat(3, 1fr) */
+grid-template-columns: repeat(3, minmax(0, 1fr));
 ```
 
 <div class="wrapper wrapper-minmax">
@@ -420,15 +425,193 @@ h1 {
 </style>
 ---
 
-This is a snippet from
-[web.dev](https://web.dev/learn/css/grid/#the-minmax()-function) that explains
-what `minmax(0, 1fr)` is really doing.
+`fr` is a flexible length (not static, like `px`, `em`, `%`) which
+describes a share of the available space in the grid container. It distributes
+space after the items have been laid out. 
 
-> To force a track to take an equal share of the space in the grid container minus
-gaps use minmax. Replace 1fr as a track size with minmax(0, 1fr). This makes the
-minimum size of the track 0 and not the min-content size. Grid will then take
-all of the available size in the container, deduct the size needed for any gaps,
-and share the rest out according to your fr units.
+<hr>
+
+Grids have a function called `minmax` that allows us to set a minimum and a
+maximum size for a track.
+
+`fr` can actually be written as `minmax(auto, fr)`. Grid looks at the intrinsic
+size of the content, then distributes available space after giving the content
+enough room. This means that you might not get tracks that each have an equal
+share of all space available in the grid container.
+
+<hr>
+
+To force a track to take an equal share of the space in the grid container minus
+gaps use minmax. Replace `1fr` as a track size with `minmax(0, 1fr)`. This makes the
+minimum size of the track 0 and not the min-content size.
+
+<hr>
+
+**Quick gotcha**: the flexible unit has to come last. `minmax(1fr, 250px)` is
+invalid, because `1fr` isn't a valid "minimum" value.
+
+---
+
+# Generating columns with auto-fill (and auto-fit)
+
+`repeat` accepts *special keywords* in addition to numbers
+
+<br>
+
+<Footer />
+
+<v-click>
+
+<br>
+
+This is the fundamental difference between auto-fill (lots of empty columns) and auto-fit (stretched ultra-wide columns).
+
+</v-click>
+
+---
+
+# [justify-content](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content)
+
+distribute additional space in the grid container around or between **columns** (inline axis).
+
+The default behaviour in CSS Grid is to stretch the columns to take up all available space.
+
+<div class="jc-wrapper">
+  <div class="jc-grid">
+    <div>Hello World</div>
+    <div>Stuff here</div>
+    <div>Some long content</div>
+  </div>
+</div>
+
+If we give it an explicit width
+
+<div class="jc-wrapper">
+  <div class="jc-grid jc-grid-fixed-width">
+    <div>Hello World</div>
+    <div>Stuff here</div>
+    <div>Some long content</div>
+  </div>
+</div>
+
+There are some properties that make sense when we have multiple columns:
+
+<div class="jc-wrapper">
+  <div class="jc-grid jc-grid-2-cols">
+    <div>Hello World</div>
+    <div>Stuff here</div>
+    <div>Some long content</div>
+    <div>other content</div>
+  </div>
+</div>
+
+<style>
+  .jc-wrapper {
+    width: 400px;
+    padding: 8px;
+    border: 1px solid gray;
+  }
+
+  .jc-grid {
+    display: grid;
+  }
+
+  .jc-grid * {
+    outline: 1px solid black;
+  }
+
+  .jc-grid-fixed-width {
+    grid-template-columns: 200px;
+  }
+
+  .jc-grid-2-cols {
+    grid-template-columns: auto auto;
+    justify-content: space-between
+  }
+</style>
+
+---
+
+# [justify-items](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items)
+
+set `justify-self` property to align items inside grid on inline axis
+
+uses `justify-content: center`
+
+<div class="jc-wrapper">
+  <div class="jc-grid">
+    <div>Hello World</div>
+    <div>Stuff here</div>
+    <div>Some long content</div>
+  </div>
+</div>
+
+<br>
+
+uses `justify-items: center`
+
+<div class="ji-wrapper">
+  <div class="ji-grid">
+    <div>Hello World</div>
+    <div>Stuff here</div>
+    <div>Some long content</div>
+  </div>
+</div>
+
+<v-click>
+
+At first glance, this seems to violate one of our core principles: columns
+aren't supposed to change their width across different rows!
+
+Upon closer inspection, though, we notice something interesting. The columns are
+actually full-width! But the items within the column have been shrunk down and
+centered.
+
+</v-click>
+
+<style>
+  .jc-wrapper, .ji-wrapper {
+    width: 400px;
+    padding: 8px;
+    border: 1px solid gray;
+  }
+
+  .jc-grid, .ji-grid {
+    display: grid;
+  }
+
+  .jc-grid *, .ji-grid * {
+    outline: 1px solid black;
+  }
+
+  .jc-grid {
+    justify-content: center;
+  }
+
+  .ji-grid {
+    justify-items: center;
+  }
+</style>
+
+---
+
+# Alignment
+
+So in a nutshell
+
+In grid the properties which begin with `justify-` are always used on the inline
+axis. And the properties which begin with `align-` are used on the block axis.
+
+- [justify-content](https://developer.mozilla.org/docs/Web/CSS/justify-content)
+and [align-content](https://developer.mozilla.org/docs/Web/CSS/align-content):
+distribute additional space in the grid container around or between tracks.
+- [justify-self](https://developer.mozilla.org/docs/Web/CSS/justify-self) and
+[align-self](https://developer.mozilla.org/docs/Web/CSS/align-self): are applied
+to a grid item to move it around inside the grid area it is placed in.
+- [justify-items](https://developer.mozilla.org/docs/Web/CSS/justify-items) and
+[align-items](https://developer.mozilla.org/docs/Web/CSS/align-items): are
+applied to the grid container to set all of the justify-self properties on the
+items.
 
 ---
 

@@ -615,6 +615,125 @@ items.
 
 ---
 
+# Placing Items
+
+- header has height of 30px and footer of 50px
+- nav has width of 80px and aside of 50px
+- main should fill the available space
+
+<br>
+
+<div class="two-col">
+
+<div class="pi-wrapper pi-wrapper-sol">
+  <header></header>
+  <nav></nav>
+  <main></main>
+  <aside></aside>
+  <footer></footer>
+</div>
+
+<div class="pi-wrapper">
+  <header></header>
+  <nav></nav>
+  <main></main>
+  <aside></aside>
+  <footer></footer>
+</div>
+
+</div>
+
+<style>
+.two-col {
+  height: 300px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+.pi-wrapper {
+  min-height: 100%;
+  display: grid;
+  outline: 1px solid black;
+}
+
+.pi-wrapper header {
+  background: yellow;
+}
+
+.pi-wrapper nav {
+  background: green;
+}
+
+.pi-wrapper main {
+  background: blue;
+}
+
+.pi-wrapper aside {
+  background: pink;
+}
+
+.pi-wrapper footer {
+  background: red;
+}
+
+.pi-wrapper * {
+  opacity: 0.4;
+}
+
+.pi-wrapper-sol {
+  grid-template-columns: 80px 1fr 50px;
+  grid-template-rows: 30px 1fr 50px;
+  grid-template-areas:
+    "header header header"
+    "nav main aside"
+    "footer footer footer"
+  ;
+}
+
+.pi-wrapper-sol header {
+  grid-area: header;
+}
+
+.pi-wrapper-sol nav {
+  grid-area: nav;
+}
+
+.pi-wrapper-sol main {
+  grid-area: main;
+}
+
+.pi-wrapper-sol aside {
+  grid-area: aside;
+}
+
+.pi-wrapper-sol footer {
+  grid-area: footer;
+}
+</style>
+
+---
+
+# Tools for placement
+
+There are a plethora of properties, but here are the important ones 
+
+The properties that you can use to place items by line number are:
+
+- [grid-column](https://developer.mozilla.org/docs/Web/CSS/grid-column)
+- [grid-row](https://developer.mozilla.org/docs/Web/CSS/grid-row)
+
+they set the start and end lines of the grid area that the item should be placed into.
+
+<hr>
+
+You can also name areas of the grid and place items onto those named areas.
+
+- Use [grid-area](https://developer.mozilla.org/docs/Web/CSS/grid-area) to give any item in the grid a name.
+- Use [grid-template-areas](https://developer.mozilla.org/docs/Web/CSS/grid-template-areas) to define which grid cells each item will span
+
+---
+
 # Learn More
 
 - [Reconsider the meaning of 1fr](https://github.com/w3c/csswg-drafts/issues/1777)
